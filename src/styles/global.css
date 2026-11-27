@@ -248,3 +248,31 @@ p { margin: 0 0 1em; }
   .lang a { padding: 5px 8px; }
   .btn--sm { padding: 10px 14px; font-size: 13px; }
 }
+
+/* Briefing */
+.bf__wrap { max-width: 760px; padding: 72px 0 120px; }
+.bf__head h1 { font-size: clamp(40px, 6vw, 60px); margin-bottom: 20px; }
+.bf__head .lead { margin-bottom: 48px; }
+.bf__sec { border: 0; margin: 0 0 28px; padding: 32px; background: #fff; border-radius: var(--r); box-shadow: 0 1px 0 var(--line); }
+.bf__sec > legend { font: 500 30px/1.2 var(--serif); color: var(--wine); padding: 0; float: left; width: 100%; margin-bottom: 20px; }
+.bf__sec > legend + * { clear: both; }
+.bf__intro { background: var(--blush); padding: 14px 18px; border-radius: 12px; font-size: 15px; color: var(--wine); }
+.bf__campo { margin-bottom: 26px; }
+.bf__campo:last-child { margin-bottom: 0; }
+.bf__lbl { display: flex; flex-direction: column; gap: 8px; }
+.bf__lbl > span, .bf__ops > legend { font-weight: 500; font-size: 16px; color: var(--ink); padding: 0; margin-bottom: 4px; }
+.bf__ops { border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.bf__ayuda { display: block; font-size: 14px; color: var(--muted); margin: 0 0 4px; }
+.bf input[type=text], .bf input[type=url], .bf input[type=email], .bf input[type=tel], .bf textarea {
+  font: 400 16px/1.5 var(--sans); color: var(--ink); background: var(--ivory);
+  border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; width: 100%;
+}
+.bf input:focus, .bf textarea:focus { outline: 2px solid var(--carmine); outline-offset: 1px; border-color: transparent; }
+.bf textarea { resize: vertical; min-height: 88px; }
+.bf__op { display: flex; align-items: flex-start; gap: 10px; font-size: 15px; cursor: pointer; padding: 4px 0; }
+.bf__op input { accent-color: var(--carmine); width: 18px; height: 18px; margin-top: 3px; flex: none; }
+.bf__otro { margin-top: 4px; }
+.bf__envio { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 40px; }
+.bf__envio button { border: 0; cursor: pointer; }
+.bf__estado { width: 100%; color: var(--wine); font-weight: 500; margin: 8px 0 0; min-height: 1.5em; }
+@media (max-width: 560px) { .bf__sec { padding: 22px 18px; } .bf__envio .btn { width: 100%; justify-content: center; } }

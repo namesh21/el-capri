@@ -1,0 +1,249 @@
+---
+// Briefing para a cliente. Protegido por senha via middleware.js e fora do Google.
+// As respostas não ficam guardadas em servidor: são montadas no navegador e enviadas por WhatsApp ao Charles.
+import '@fontsource/cormorant-garamond/500.css';
+import '@fontsource/cormorant-garamond/500-italic.css';
+import '@fontsource/jost/400.css';
+import '@fontsource/jost/500.css';
+import '../styles/global.css';
+import { zonas } from '../data/site';
+
+const DESTINO = '5511949947920'; // WhatsApp do Charles
+
+type Campo =
+  | { tipo: 'text' | 'textarea' | 'url' | 'email' | 'tel'; name: string; label: string; ph?: string; ayuda?: string }
+  | { tipo: 'radio' | 'check'; name: string; label: string; ops: string[]; otro?: boolean; ayuda?: string };
+
+const secciones: { titulo: string; intro?: string; campos: Campo[] }[] = [
+  {
+    titulo: '1. Sobre ti',
+    campos: [
+      { tipo: 'text', name: 'Nombre como quieres aparecer', label: '¿Cómo quieres aparecer en el sitio?', ph: 'Ej.: Dra. María Gómez' },
+      { tipo: 'radio', name: 'Profesión', label: '¿Cuál es tu profesión?', ops: ['Médica general con formación en estética', 'Médica especialista (dermatología, cirugía plástica…)', 'Enfermera', 'Esteticista / cosmetóloga'], otro: true,
+        ayuda: 'Es importante: en Colombia el Botox, los rellenos y los sueros intravenosos solo los puede aplicar personal médico.' },
+      { tipo: 'text', name: 'Registro RETHUS / tarjeta profesional', label: 'Número de registro (RETHUS o tarjeta profesional)' },
+      { tipo: 'text', name: 'Universidad y año de grado', label: 'Universidad y año de grado' },
+      { tipo: 'textarea', name: 'Formaciones y certificaciones', label: 'Diplomados, cursos o certificaciones en estética', ph: 'Uno por línea' },
+      { tipo: 'text', name: 'Años de experiencia', label: '¿Cuántos años llevas aplicando estos tratamientos?' },
+      { tipo: 'textarea', name: 'Tu historia', label: '¿Por qué empezaste en la estética y por qué a domicilio?', ayuda: 'Dos o tres frases bastan. Lo usamos en la sección "Sobre mí".' },
+    ],
+  },
+  {
+    titulo: '2. Marca',
+    campos: [
+      { tipo: 'radio', name: 'Nombre de la marca', label: '¿Con qué nombre quieres salir?', ops: ['Bienestar desde Adentro', 'El Capri'], otro: true },
+      { tipo: 'radio', name: 'Logo', label: '¿Tienes el logo en buena calidad?', ops: ['Sí, en vector (AI, SVG, PDF)', 'Solo en imagen (PNG/JPG)', 'No tengo logo / quiero uno nuevo'] },
+      { tipo: 'text', name: 'Instagram', label: 'Instagram', ph: '@usuario' },
+      { tipo: 'text', name: 'Otras redes', label: 'TikTok, Facebook u otras redes' },
+      { tipo: 'radio', name: 'Dominio', label: '¿Ya tienes dominio (www)?', ops: ['Sí', 'No, quiero que me ayuden a escoger uno'] },
+      { tipo: 'text', name: 'Dominio actual', label: 'Si ya tienes, ¿cuál es?' },
+    ],
+  },
+  {
+    titulo: '3. Servicio a domicilio',
+    campos: [
+      { tipo: 'check', name: 'Zonas que atiende', label: '¿En qué zonas atiendes?', ops: [...zonas, 'Itagüí', 'Bello', 'Rionegro'], otro: true },
+      { tipo: 'radio', name: 'Recargo por desplazamiento', label: '¿Cobras recargo por desplazamiento?', ops: ['No', 'Sí, igual para todas las zonas', 'Sí, depende de la zona'] },
+      { tipo: 'check', name: 'Días de atención', label: '¿Qué días atiendes?', ops: ['Lunes a viernes', 'Sábados', 'Domingos', 'Festivos'] },
+      { tipo: 'text', name: 'Horario', label: '¿En qué horario?', ph: 'Ej.: 7 a.m. a 8 p.m.' },
+      { tipo: 'text', name: 'Anticipación mínima', label: '¿Con cuánta anticipación hay que agendar?', ph: 'Ej.: mismo día, 24 horas…' },
+      { tipo: 'check', name: 'Lugares de atención', label: '¿Dónde atiendes?', ops: ['Casas y apartamentos', 'Oficinas', 'Hoteles', 'Airbnb'], otro: true },
+      { tipo: 'radio', name: 'Grupos', label: '¿Atiendes grupos (varias personas en la misma visita)?', ops: ['Sí', 'No'] },
+      { tipo: 'radio', name: 'Habilitación domiciliaria (REPS)', label: '¿Tienes habilitada la atención domiciliaria ante la Secretaría de Salud (REPS)?', ops: ['Sí', 'No', 'No sé / está en trámite'] },
+      { tipo: 'radio', name: 'Consultorio físico', label: '¿Tienes también un consultorio físico?', ops: ['No, solo domicilio', 'Sí'] },
+      { tipo: 'text', name: 'Dirección del consultorio', label: 'Si tienes consultorio, ¿dónde queda?' },
+    ],
+  },
+  {
+    titulo: '4. Idiomas y turistas',
+    campos: [
+      { tipo: 'radio', name: 'Inglés', label: '¿Cómo es tu inglés para atender pacientes?', ops: ['Fluido', 'Me defiendo en la consulta', 'Solo por escrito (WhatsApp, con traductor)', 'No atiendo en inglés'] },
+      { tipo: 'text', name: 'Otros idiomas', label: '¿Otros idiomas?' },
+      { tipo: 'radio', name: 'Pacientes extranjeros hoy', label: '¿Hoy atiendes turistas o extranjeros?', ops: ['Muchos', 'Algunos', 'Casi ninguno'] },
+    ],
+  },
+  {
+    titulo: '5. Tratamientos y precios',
+    campos: [
+      { tipo: 'check', name: 'Tratamientos que ofrece', label: '¿Qué tratamientos quieres mostrar en el sitio?', ops: ['Botox', 'Rellenos con ácido hialurónico', 'Plasma rico en plaquetas', 'Sueroterapia', 'Bioestimuladores (Radiesse, Sculptra…)', 'Hilos tensores', 'Mesoterapia / skinboosters', 'Enzimas / lipolíticos'], otro: true },
+      { tipo: 'check', name: 'Sueros que ofrece', label: '¿Qué sueros ofreces?', ops: ['Multivitamínico', 'Megadosis de vitamina C', 'Antienvejecimiento', 'Detox', 'Hidratación', 'Para resaca / recuperación', 'NAD+'], otro: true },
+      { tipo: 'textarea', name: 'Marcas de producto', label: '¿Qué marcas usas?', ph: 'Ej.: Botox Allergan, Dysport, Juvéderm, Restylane…' },
+      { tipo: 'radio', name: 'Mostrar precios', label: '¿Quieres mostrar precios en el sitio?', ops: ['Sí, precios exactos', 'Sí, "desde $…"', 'No, solo por WhatsApp'] },
+      { tipo: 'textarea', name: 'Precios', label: 'Precios por tratamiento (en pesos o dólares)', ph: 'Botox: $…\nÁcido hialurónico labios: $…\nSuero multivitamínico: $…' },
+      { tipo: 'textarea', name: 'Paquetes y promociones', label: '¿Tienes paquetes, combos o promociones fijas?' },
+      { tipo: 'textarea', name: 'Tiempos reales', label: '¿Cuánto dura cada sesión y cuánto suele durar el resultado?', ayuda: 'En el sitio pusimos promedios (Botox 20–30 min, efecto de 3 a 6 meses). Corrígelos si trabajas diferente.' },
+      { tipo: 'radio', name: 'Control post-tratamiento', label: '¿El control posterior está incluido en el precio?', ops: ['Sí', 'No', 'Depende del tratamiento'] },
+    ],
+  },
+  {
+    titulo: '6. Tus clientas',
+    campos: [
+      { tipo: 'textarea', name: 'Cliente ideal', label: '¿Quién es tu clienta típica?', ph: 'Edad, profesión, zona, qué busca…' },
+      { tipo: 'textarea', name: 'Diferencial', label: '¿Por qué te escogen a ti y no a otra?' },
+      { tipo: 'textarea', name: 'Preguntas frecuentes', label: '¿Qué te preguntan más por WhatsApp antes de agendar?' },
+      { tipo: 'textarea', name: 'Objeciones', label: '¿Qué hace que una persona no agende?', ph: 'Precio, miedo, desconfianza de hacerlo en casa…' },
+      { tipo: 'text', name: 'Competencia', label: '¿Qué profesionales o clínicas ves como competencia? (Instagram o sitio)' },
+    ],
+  },
+  {
+    titulo: '7. Fotos y contenido',
+    intro: 'Las fotos y el logo no se suben aquí: después de enviar este formulario, mándalos por el mismo chat de WhatsApp (como documento, para no perder calidad).',
+    campos: [
+      { tipo: 'radio', name: 'Fotos sin navidad', label: '¿Tienes fotos profesionales tuyas sin tema navideño?', ops: ['Sí, las envío por WhatsApp', 'No, necesito una sesión de fotos'] },
+      { tipo: 'radio', name: 'Antes y después', label: '¿Tienes fotos de antes y después con autorización escrita de las pacientes?', ops: ['Sí', 'Tengo fotos pero sin autorización', 'No'] },
+      { tipo: 'textarea', name: 'Testimonios', label: 'Testimonios de pacientes que podamos usar (con nombre o inicial)' },
+      { tipo: 'textarea', name: 'Sitios de referencia', label: '¿Algún sitio o Instagram cuyo estilo te guste?' },
+    ],
+  },
+  {
+    titulo: '8. Contacto y cierre',
+    campos: [
+      { tipo: 'tel', name: 'WhatsApp para el sitio', label: 'WhatsApp que aparece en el sitio', ph: '301 205 1979' },
+      { tipo: 'email', name: 'Correo', label: 'Correo electrónico' },
+      { tipo: 'text', name: 'Quién responde', label: '¿Quién responde los mensajes? ¿Tú o una asistente?' },
+      { tipo: 'textarea', name: 'Cambios al sitio beta', label: '¿Qué cambiarías del sitio que te mostramos?' },
+      { tipo: 'textarea', name: 'Observaciones', label: '¿Algo más que debamos saber?' },
+    ],
+  },
+];
+---
+<!doctype html>
+<html lang="es-CO">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Briefing · Sitio web</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body class="bf">
+    <main class="wrap bf__wrap">
+      <header class="bf__head">
+        <p class="eyebrow">Briefing del sitio web</p>
+        <h1>Cuéntanos sobre <em>tu servicio</em></h1>
+        <p class="lead">
+          Con estas respuestas terminamos el sitio. Toma unos 15 minutos. Lo que escribes se guarda en este
+          navegador, así que puedes salir y volver para terminar. Si no sabes algo, déjalo en blanco.
+        </p>
+      </header>
+
+      <form id="bf" novalidate>
+        {secciones.map((s) => (
+          <fieldset class="bf__sec" data-titulo={s.titulo}>
+            <legend>{s.titulo}</legend>
+            {s.intro && <p class="bf__intro">{s.intro}</p>}
+            {s.campos.map((c) => (
+              <div class="bf__campo">
+                {(c.tipo === 'radio' || c.tipo === 'check') ? (
+                  <fieldset class="bf__ops" data-name={c.name}>
+                    <legend>{c.label}</legend>
+                    {c.ayuda && <p class="bf__ayuda">{c.ayuda}</p>}
+                    {c.ops.map((o) => (
+                      <label class="bf__op">
+                        <input type={c.tipo === 'radio' ? 'radio' : 'checkbox'} name={c.name} value={o} />
+                        <span>{o}</span>
+                      </label>
+                    ))}
+                    {c.otro && (
+                      <input class="bf__otro" type="text" name={`${c.name} (otro)`} placeholder="Otro: escribe aquí" aria-label={`${c.label}: otro`} />
+                    )}
+                  </fieldset>
+                ) : (
+                  <label class="bf__lbl">
+                    <span>{c.label}</span>
+                    {c.ayuda && <small class="bf__ayuda">{c.ayuda}</small>}
+                    {c.tipo === 'textarea'
+                      ? <textarea name={c.name} rows="3" placeholder={c.ph}></textarea>
+                      : <input type={c.tipo} name={c.name} placeholder={c.ph} />}
+                  </label>
+                )}
+              </div>
+            ))}
+          </fieldset>
+        ))}
+
+        <div class="bf__envio">
+          <button type="submit" class="btn">Enviar por WhatsApp</button>
+          <button type="button" class="btn btn--ghost" id="bf-copiar">Copiar respuestas</button>
+          <button type="button" class="btn btn--ghost" id="bf-bajar">Descargar .txt</button>
+          <p class="bf__estado" id="bf-estado" role="status"></p>
+          <p class="bf__ayuda">Después de enviar, manda por el mismo chat tus fotos y el logo.</p>
+        </div>
+      </form>
+    </main>
+
+    <script define:vars={{ DESTINO }}>
+      const form = document.getElementById('bf');
+      const estado = document.getElementById('bf-estado');
+      const KEY = 'briefing-el-capri';
+
+      // Rascunho salvo no navegador (pode falhar em modo privado: ignoramos)
+      function guardar() {
+        try {
+          const datos = {};
+          form.querySelectorAll('input, textarea').forEach((el) => {
+            if (el.type === 'radio' || el.type === 'checkbox') {
+              if (el.checked) (datos[el.name] ||= []).push(el.value);
+            } else if (el.value) datos[el.name] = el.value;
+          });
+          localStorage.setItem(KEY, JSON.stringify(datos));
+        } catch {}
+      }
+      function cargar() {
+        try {
+          const datos = JSON.parse(localStorage.getItem(KEY) || '{}');
+          form.querySelectorAll('input, textarea').forEach((el) => {
+            const v = datos[el.name];
+            if (v == null) return;
+            if (el.type === 'radio' || el.type === 'checkbox') el.checked = v.includes(el.value);
+            else el.value = v;
+          });
+        } catch {}
+      }
+      cargar();
+      form.addEventListener('input', guardar);
+      form.addEventListener('change', guardar);
+
+      function texto() {
+        const lineas = ['*BRIEFING – SITIO WEB*', ''];
+        form.querySelectorAll('fieldset.bf__sec').forEach((sec) => {
+          const bloque = [];
+          sec.querySelectorAll('.bf__campo').forEach((campo) => {
+            const grupo = campo.querySelector('.bf__ops');
+            if (grupo) {
+              const vals = [...grupo.querySelectorAll('input:checked')].map((i) => i.value);
+              const otro = grupo.querySelector('.bf__otro');
+              if (otro && otro.value.trim()) vals.push(otro.value.trim());
+              if (vals.length) bloque.push(`• ${grupo.dataset.name}: ${vals.join(', ')}`);
+            } else {
+              const el = campo.querySelector('input, textarea');
+              if (el.value.trim()) bloque.push(`• ${el.name}: ${el.value.trim()}`);
+            }
+          });
+          if (bloque.length) lineas.push(`*${sec.dataset.titulo}*`, ...bloque, '');
+        });
+        return lineas.join('\n');
+      }
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const t = texto();
+        if (t.split('\n').length < 4) { estado.textContent = 'El formulario está vacío.'; return; }
+        window.open(`https://wa.me/${DESTINO}?text=${encodeURIComponent(t)}`, '_blank');
+        estado.textContent = 'Se abrió WhatsApp con tus respuestas. Si el texto no aparece completo, usa "Copiar respuestas" y pégalo en el chat.';
+      });
+
+      document.getElementById('bf-copiar').addEventListener('click', async () => {
+        try { await navigator.clipboard.writeText(texto()); estado.textContent = 'Respuestas copiadas. Pégalas en el chat de WhatsApp.'; }
+        catch { estado.textContent = 'No se pudo copiar. Usa "Descargar .txt".'; }
+      });
+
+      document.getElementById('bf-bajar').addEventListener('click', () => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([texto().replace(/\*/g, '')], { type: 'text/plain' }));
+        a.download = 'briefing-sitio-web.txt';
+        a.click();
+      });
+    </script>
+  </body>
+</html>
