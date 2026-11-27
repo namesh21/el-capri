@@ -3,7 +3,7 @@
 // O repositório é público: nunca coloque a senha no código.
 import { next } from '@vercel/functions';
 
-export const config = { matcher: ['/briefing', '/briefing/:path*'] };
+export const config = { matcher: ['/briefing', '/briefing/:path*', '/api/briefing'] };
 
 export default function middleware(request) {
   const senha = process.env.BRIEFING_PASSWORD;

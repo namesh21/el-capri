@@ -276,3 +276,4 @@ p { margin: 0 0 1em; }
 .bf__envio button { border: 0; cursor: pointer; }
 .bf__estado { width: 100%; color: var(--wine); font-weight: 500; margin: 8px 0 0; min-height: 1.5em; }
 @media (max-width: 560px) { .bf__sec { padding: 22px 18px; } .bf__envio .btn { width: 100%; justify-content: center; } }
+.bf__hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }

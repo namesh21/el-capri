@@ -128,6 +128,7 @@ const secciones: { titulo: string; intro?: string; campos: Campo[] }[] = [
       </header>
 
       <form id="bf" novalidate>
+        <input type="text" name="empresa" tabindex="-1" autocomplete="off" aria-hidden="true" class="bf__hp" />
         {secciones.map((s) => (
           <fieldset class="bf__sec" data-titulo={s.titulo}>
             <legend>{s.titulo}</legend>
@@ -229,8 +230,25 @@ const secciones: { titulo: string; intro?: string; campos: Campo[] }[] = [
         e.preventDefault();
         const t = texto();
         if (t.split('\n').length < 4) { estado.textContent = 'El formulario está vacío.'; return; }
+        // WhatsApp primeiro (abrir janela precisa ser síncrono para não ser bloqueado)
         window.open(`https://wa.me/${DESTINO}?text=${encodeURIComponent(t)}`, '_blank');
-        estado.textContent = 'Se abrió WhatsApp con tus respuestas. Si el texto no aparece completo, usa "Copiar respuestas" y pégalo en el chat.';
+        estado.textContent = 'Enviando…';
+        fetch('/briefing/enviar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          keepalive: true,
+          body: JSON.stringify({ texto: t, empresa: form.querySelector('[name=empresa]').value }),
+        })
+          .then((r) => r.json())
+          .then((d) => {
+            estado.textContent = d.ok
+              ? '¡Listo! Recibimos tus respuestas por correo. En WhatsApp solo falta tocar "Enviar" y mandar tus fotos y el logo.'
+              : 'Se abrió WhatsApp con tus respuestas: toca "Enviar" allí. Si el texto no aparece completo, usa "Copiar respuestas".';
+          })
+          .catch(() => {
+            estado.textContent = 'Se abrió WhatsApp con tus respuestas: toca "Enviar" allí. Si el texto no aparece completo, usa "Copiar respuestas".';
+          });
       });
 
       document.getElementById('bf-copiar').addEventListener('click', async () => {
