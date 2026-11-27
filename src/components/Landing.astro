@@ -1,0 +1,244 @@
+---
+import { Image } from 'astro:assets';
+import retratoBotox from '../assets/retrato-botox.jpg';
+import retratoConsultorio from '../assets/retrato-consultorio.jpg';
+import { site, waLink, zonas, suerosColor, content, type Lang } from '../data/site';
+import '@fontsource/cormorant-garamond/500.css';
+import '@fontsource/cormorant-garamond/600.css';
+import '@fontsource/cormorant-garamond/500-italic.css';
+import '@fontsource/jost/400.css';
+import '@fontsource/jost/500.css';
+import '@fontsource/jost/600.css';
+import '../styles/global.css';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = content[lang];
+const other: Lang = lang === 'es' ? 'en' : 'es';
+const url = (l: Lang) => new URL(content[l].path, site.url).href;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'MedicalBusiness',
+      name: site.marca,
+      url: url(lang),
+      telephone: `+${site.whatsapp}`,
+      slogan: t.hero.eyebrow,
+      address: { '@type': 'PostalAddress', addressLocality: 'Medellín', addressRegion: 'Antioquia', addressCountry: 'CO' },
+      areaServed: [{ '@type': 'City', name: 'Medellín' }, ...zonas.map((z) => ({ '@type': 'Place', name: z }))],
+      availableLanguage: ['es', 'en'],
+      availableService: t.tx.items.map((i) => ({ '@type': 'MedicalProcedure', name: `${i.apodo} (${i.nombre})` })),
+    },
+    {
+      '@type': 'FAQPage',
+      inLanguage: t.htmlLang,
+      mainEntity: t.faq.items.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    },
+  ],
+};
+---
+<!doctype html>
+<html lang={t.htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{t.title}</title>
+    <meta name="description" content={t.description} />
+    <link rel="canonical" href={url(lang)} />
+    <link rel="alternate" hreflang="es-CO" href={url('es')} />
+    <link rel="alternate" hreflang="en" href={url('en')} />
+    <link rel="alternate" hreflang="x-default" href={url('es')} />
+    <meta name="robots" content="noindex" /> <!-- beta: remover ao publicar -->
+    <meta property="og:title" content={t.title} />
+    <meta property="og:description" content={t.description} />
+    <meta property="og:locale" content={t.ogLocale} />
+    <meta name="theme-color" content="#7a1023" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="wrap topbar__in">
+        <a href={t.path} class="brand" aria-label={site.marca}>
+          <svg class="brand__mark" viewBox="0 0 32 44" aria-hidden="true">
+            <path d="M16 2C16 2 3 18 3 28a13 13 0 0 0 26 0C29 18 16 2 16 2Z" fill="none" stroke="currentColor" stroke-width="1.6" />
+            <path d="M16 20v17M11 28h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          </svg>
+          <span class="brand__txt">Bienestar<small>desde adentro</small></span>
+        </a>
+        <nav class="nav" aria-label="Menu">
+          <a href="#domicilio">{t.nav.domicilio}</a>
+          <a href="#tratamientos">{t.nav.tratamientos}</a>
+          <a href="#sobre-mi">{t.nav.sobre}</a>
+          <a href="#proceso">{t.nav.proceso}</a>
+          <a href="#preguntas">{t.nav.faq}</a>
+        </nav>
+        <div class="topbar__actions">
+          <div class="lang" role="group" aria-label="Idioma / Language">
+            <a href="/" aria-current={lang === 'es' ? 'true' : undefined} hreflang="es">ES</a>
+            <a href="/en/" aria-current={lang === 'en' ? 'true' : undefined} hreflang="en">EN</a>
+          </div>
+          <a class="btn btn--sm" href={waLink(t.waDefault)} target="_blank" rel="noopener">{t.nav.cta}</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="wrap hero__grid">
+          <div class="hero__copy">
+            <p class="eyebrow">{t.hero.eyebrow}</p>
+            <h1>{t.hero.h1} <em>{t.hero.h1em}</em></h1>
+            <p class="lead">{t.hero.lead}</p>
+            <div class="hero__cta">
+              <a class="btn" href={waLink(t.waDefault)} target="_blank" rel="noopener">{t.hero.cta}</a>
+              <a class="link" href="#tratamientos">{t.hero.link}</a>
+            </div>
+            <ul class="trust">{t.hero.trust.map((x) => <li>{x}</li>)}</ul>
+          </div>
+          <figure class="hero__img">
+            <Image src={retratoBotox} alt={t.sobre.alt} widths={[400, 600, 800]} sizes="(max-width: 860px) 90vw, 440px" loading="eager" />
+            <figcaption>
+              <strong>{site.profesional}</strong>
+              <span>{t.titulo}</span>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="domicilio" class="section section--blush">
+        <div class="wrap">
+          <header class="sec-head">
+            <p class="eyebrow">{t.dom.eyebrow}</p>
+            <h2>{t.dom.h2} <em>{t.dom.h2em}</em></h2>
+          </header>
+          <ul class="perks">
+            {t.dom.ventajas.map((v) => (
+              <li><h3>{v.t}</h3><p>{v.d}</p></li>
+            ))}
+          </ul>
+          <div class="zonas">
+            <p class="zonas__label">{t.dom.zonasLabel}</p>
+            <ul>{zonas.map((z) => <li>{z}</li>)}</ul>
+            <a class="link" href={waLink(t.dom.zonasMsg)} target="_blank" rel="noopener">{t.dom.zonasLink}</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="tratamientos" class="section">
+        <div class="wrap">
+          <header class="sec-head">
+            <p class="eyebrow">{t.tx.eyebrow}</p>
+            <h2>{t.tx.h2} <em>{t.tx.h2em}</em></h2>
+          </header>
+          <ol class="tx">
+            {t.tx.items.map((i, n) => (
+              <li class="tx__item" id={i.id}>
+                <span class="tx__num">{String(n + 1).padStart(2, '0')}</span>
+                <div class="tx__main">
+                  <h3>{i.apodo}<span>{i.nombre}</span></h3>
+                  <p>{i.resumen}</p>
+                </div>
+                <dl class="tx__meta">
+                  <dt>{t.tx.idealLabel}</dt>
+                  <dd>{i.ideal}</dd>
+                  <dt>{t.tx.esperarLabel}</dt>
+                  <dd>{i.detalle}</dd>
+                </dl>
+                <a class="tx__cta" href={waLink(i.msg)} target="_blank" rel="noopener">{t.tx.cta}</a>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section class="section section--rose">
+        <div class="wrap sueros">
+          <div>
+            <p class="eyebrow">{t.sueros.eyebrow}</p>
+            <h2>{t.sueros.h2} <em>{t.sueros.h2em}</em></h2>
+            <p class="lead">{t.sueros.lead}</p>
+            <a class="btn btn--ghost" href={waLink(t.sueros.msg)} target="_blank" rel="noopener">{t.sueros.cta}</a>
+          </div>
+          <ul class="sueros__list">
+            {t.sueros.items.map((s, n) => (
+              <li style={`--c:${suerosColor[n]}`}>
+                <span class="drop" aria-hidden="true"></span>
+                <div><h3>{s.nombre}</h3><p>{s.texto}</p></div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section id="sobre-mi" class="section">
+        <div class="wrap about">
+          <figure class="about__img">
+            <Image src={retratoConsultorio} alt={t.sobre.alt} widths={[320, 480]} sizes="(max-width: 860px) 70vw, 360px" />
+          </figure>
+          <div class="about__copy">
+            <p class="eyebrow">{t.sobre.eyebrow}</p>
+            <h2>{t.sobre.h2} <em>{t.sobre.h2em}</em></h2>
+            {t.sobre.p.map((p) => <p>{p}</p>)}
+            <p class="about__reg">{site.registro[lang]}</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="proceso" class="section section--dark">
+        <div class="wrap">
+          <header class="sec-head">
+            <p class="eyebrow">{t.proceso.eyebrow}</p>
+            <h2>{t.proceso.h2} <em>{t.proceso.h2em}</em></h2>
+          </header>
+          <ol class="steps">
+            {t.proceso.pasos.map((p, n) => (
+              <li><span>{n + 1}</span><h3>{p.t}</h3><p>{p.d}</p></li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section id="preguntas" class="section">
+        <div class="wrap faq">
+          <header class="sec-head">
+            <p class="eyebrow">{t.faq.eyebrow}</p>
+            <h2>{t.faq.h2} <em>{t.faq.h2em}</em></h2>
+          </header>
+          <div class="faq__list">
+            {t.faq.items.map((f) => (
+              <details><summary>{f.q}</summary><p>{f.a}</p></details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="cta">
+        <div class="wrap cta__in">
+          <h2>{t.cta.h2} <em>{t.cta.h2em}</em></h2>
+          <p>{t.cta.p}</p>
+          <a class="btn btn--light" href={waLink(t.waDefault)} target="_blank" rel="noopener">WhatsApp · {site.whatsappVisible}</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="wrap footer__in">
+        <div>
+          <strong>{site.marca}</strong>
+          <p>{site.profesional} · {site.registro[lang]}<br />{t.footer.zona}</p>
+        </div>
+        <p class="footer__legal">
+          {t.footer.legal}<br />
+          <a href={content[other].path} hreflang={other}>{other === 'en' ? 'English version' : 'Versión en español'}</a>
+        </p>
+      </div>
+    </footer>
+
+    <a class="wa-float" href={waLink(t.waDefault)} target="_blank" rel="noopener" aria-label={t.waAria}>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.4.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
+    </a>
+  </body>
+</html>
