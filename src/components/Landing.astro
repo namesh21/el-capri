@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import retratoBotox from '../assets/retrato-botox.jpg';
 import retratoConsultorio from '../assets/retrato-consultorio.jpg';
-import { site, waLink, zonas, suerosColor, content, type Lang } from '../data/site';
+import { site, waLink, igLink, zonas, suerosColor, precios, content, type Lang } from '../data/site';
 import '@fontsource/cormorant-garamond/500.css';
 import '@fontsource/cormorant-garamond/600.css';
 import '@fontsource/cormorant-garamond/500-italic.css';
@@ -21,15 +21,19 @@ const schema = {
   '@context': 'https://schema.org',
   '@graph': [
     {
-      '@type': 'MedicalBusiness',
+      '@type': 'HealthAndBeautyBusiness',
       name: site.marca,
+      founder: { '@type': 'Person', name: site.profesional, jobTitle: t.titulo },
+      sameAs: [igLink],
+      priceRange: '$80.000 – $1.200.000 COP',
+      openingHoursSpecification: [{ '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'], opens: '08:00', closes: '21:00' }],
       url: url(lang),
       telephone: `+${site.whatsapp}`,
       slogan: t.hero.eyebrow,
       address: { '@type': 'PostalAddress', addressLocality: 'Medellín', addressRegion: 'Antioquia', addressCountry: 'CO' },
       areaServed: [{ '@type': 'City', name: 'Medellín' }, ...zonas.map((z) => ({ '@type': 'Place', name: z }))],
       availableLanguage: ['es', 'en'],
-      availableService: t.tx.items.map((i) => ({ '@type': 'MedicalProcedure', name: `${i.apodo} (${i.nombre})` })),
+      makesOffer: precios.map((p) => ({ '@type': 'Offer', name: p[lang], price: p.precio.replace(/\./g, ''), priceCurrency: 'COP' })),
     },
     {
       '@type': 'FAQPage',
@@ -71,8 +75,8 @@ const schema = {
         <nav class="nav" aria-label="Menu">
           <a href="#domicilio">{t.nav.domicilio}</a>
           <a href="#tratamientos">{t.nav.tratamientos}</a>
+          <a href="#precios">{t.nav.precios}</a>
           <a href="#sobre-mi">{t.nav.sobre}</a>
-          <a href="#proceso">{t.nav.proceso}</a>
           <a href="#preguntas">{t.nav.faq}</a>
         </nav>
         <div class="topbar__actions">
@@ -122,6 +126,7 @@ const schema = {
           <div class="zonas">
             <p class="zonas__label">{t.dom.zonasLabel}</p>
             <ul>{zonas.map((z) => <li>{z}</li>)}</ul>
+            <p class="zonas__nota">{t.dom.zonasNota}</p>
             <a class="link" href={waLink(t.dom.zonasMsg)} target="_blank" rel="noopener">{t.dom.zonasLink}</a>
           </div>
         </div>
@@ -173,6 +178,43 @@ const schema = {
         </div>
       </section>
 
+      <section id="spa" class="section">
+        <div class="wrap">
+          <header class="sec-head">
+            <p class="eyebrow">{t.spa.eyebrow}</p>
+            <h2>{t.spa.h2} <em>{t.spa.h2em}</em></h2>
+          </header>
+          <ul class="perks spa">
+            {t.spa.items.map((v) => (
+              <li><span class="spa__t">{v.tiempo}</span><h3>{v.t}</h3><p>{v.d}</p></li>
+            ))}
+          </ul>
+          <p class="spa__cta"><a class="btn btn--ghost" href={waLink(t.spa.msg)} target="_blank" rel="noopener">{t.spa.cta}</a></p>
+        </div>
+      </section>
+
+      <section id="precios" class="section section--blush">
+        <div class="wrap precios">
+          <header class="sec-head">
+            <p class="eyebrow">{t.precios.eyebrow}</p>
+            <h2>{t.precios.h2} <em>{t.precios.h2em}</em></h2>
+            <p class="precios__nota">{t.precios.nota}</p>
+            <a class="btn" href={waLink(t.precios.msg)} target="_blank" rel="noopener">{t.precios.cta}</a>
+          </header>
+          <ul class="precios__list">
+            {precios.map((p) => (
+              <li>
+                <div>
+                  <strong>{p[lang]}</strong>
+                  {(lang === 'es' ? p.notaEs : p.notaEn) && <small>{lang === 'es' ? p.notaEs : p.notaEn}</small>}
+                </div>
+                <span>{p.desde && <em>{t.precios.desde} </em>}{lang === 'es' ? `$${p.precio}` : `COP ${p.precio.replace(/\./g, ',')}`}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       <section id="sobre-mi" class="section">
         <div class="wrap about">
           <figure class="about__img">
@@ -182,7 +224,7 @@ const schema = {
             <p class="eyebrow">{t.sobre.eyebrow}</p>
             <h2>{t.sobre.h2} <em>{t.sobre.h2em}</em></h2>
             {t.sobre.p.map((p) => <p>{p}</p>)}
-            <p class="about__reg">{site.registro[lang]}</p>
+            <p class="about__reg">{t.registro} · <a href={igLink} target="_blank" rel="noopener">@{site.instagram}</a></p>
           </div>
         </div>
       </section>
@@ -228,7 +270,7 @@ const schema = {
       <div class="wrap footer__in">
         <div>
           <strong>{site.marca}</strong>
-          <p>{site.profesional} · {site.registro[lang]}<br />{t.footer.zona}</p>
+          <p>{site.profesional} · {t.registro}<br />{t.footer.zona}<br /><a href={igLink} target="_blank" rel="noopener">Instagram @{site.instagram}</a></p>
         </div>
         <p class="footer__legal">
           {t.footer.legal}<br />

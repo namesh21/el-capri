@@ -16,14 +16,13 @@ Deploy: importar o repositório na Vercel (preset Astro, sem configuração extr
 - Fotos: `src/assets/` (recortadas dos flyers de Natal)
 
 ## Antes de publicar
-- [ ] Nome completo da profissional e número de registro (RETHUS)
-- [ ] Confirmar se ela atende em inglês (a FAQ em EN diz que sim)
-- [ ] Confirmar zonas atendidas e horários (noite/fim de semana?)
-- [ ] Habilitação para atendimento domiciliar (modalidade extramural no REPS)
-- [ ] Confirmar se ela é médica (Botox e preenchimento só podem ser aplicados por médico na Colômbia)
-- [ ] Endereço/bairro do consultório em Medellín (um dos flyers diz Bogotá)
-- [ ] Confirmar a marca: "Bienestar desde Adentro" ou "El Capri"?
-- [ ] Confirmar "producto sellado y trazable" e os tempos/durações citados
-- [ ] Fotos sem gorro de Natal + logo em vetor (SVG)
-- [ ] Instagram, domínio definitivo (`site.url` e `astro.config.mjs`)
-- [ ] Remover `<meta name="robots" content="noindex">` em `index.astro`
+Briefing respondido em 27/11/2026 e aplicado. Pendências:
+- [ ] **Profissão:** ela é enfermeira (RETHUS 1024556189), não médica. O site não usa "Dra." nem "médica". Avaliar o risco de anunciar Botox e preenchimento feitos por enfermeira
+- [ ] Marcas de ácido hialurónico: ela citou La Roche-Posay / The Ordinary, que são cosméticos tópicos, não preenchedores injetáveis. Confirmar com ela
+- [ ] Preço do ácido hialurónico ($800.000): é por seringa?
+- [ ] Botox "efeito imediato" (resposta dela): o site mantém o prazo realista de dias
+- [ ] "Spa April": é submarca? Onde entra?
+- [ ] Endereço Cra 46 #30-25 (Buenos Aires): ela diz que não tem consultório. Não foi publicado
+- [ ] Fotos sem tema natalino, logo e antes/depois (com autorização escrita) e depoimentos: ela vai mandar pelo WhatsApp
+- [ ] Domínio definitivo (ela quer ajuda para escolher)
+- [ ] Remover `<meta name="robots" content="noindex">` em `src/components/Landing.astro`

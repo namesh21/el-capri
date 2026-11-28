@@ -1,59 +1,73 @@
-// Dados centrais do site (ES + EN). Tudo marcado com TODO precisa ser confirmado com a cliente antes de publicar.
+// Dados centrais do site (ES + EN), conforme o briefing respondido pela cliente em 27/11/2026.
+// TODO = confirmar com a cliente antes de publicar.
 
 export type Lang = 'es' | 'en';
 
 export const site = {
-  marca: 'Bienestar desde Adentro',
-  // TODO: nome completo da médica e número de registro (RETHUS)
-  profesional: 'Dra. [Nombre Apellido]',
-  registro: { es: 'Registro médico [N.º RETHUS]', en: 'Medical license [RETHUS No.]' },
+  marca: 'Bienestar desde Adentro', // TODO: a cliente citou também "Spa April" — confirmar se é submarca
+  profesional: 'Elizabeth Vargas',
+  rethus: '1024556189',
   ciudad: 'Medellín',
   whatsapp: '573012051979',
   whatsappVisible: '+57 301 205 1979',
-  instagram: '', // TODO
+  instagram: 'elizabeth_vargas011',
   url: 'https://el-capri.vercel.app', // TODO: domínio definitivo
 };
 
+export const igLink = `https://instagram.com/${site.instagram}`;
 export const waLink = (msg: string) => `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(msg)}`;
 
-// TODO: confirmar com a cliente quais zonas ela atende
-export const zonas = ['El Poblado', 'Provenza', 'Envigado', 'Laureles', 'Sabaneta', 'Belén', 'Estadio', 'Llanogrande'];
+export const zonas = ['El Poblado', 'Provenza', 'Laureles', 'Envigado', 'Sabaneta', 'Belén', 'Estadio', 'Itagüí', 'Bello', 'Llanogrande', 'Rionegro'];
 
-// cores dos soros (iguais nos dois idiomas)
-export const suerosColor = ['#E8A93B', '#E0762F', '#8A5BB8', '#6FA85A', '#4E8FCB'];
+export const suerosColor = ['#E8A93B', '#E0762F', '#8A5BB8', '#6FA85A', '#4E8FCB', '#C9584F', '#3F6E8C'];
+
+// Preços em pesos colombianos, como a cliente informou
+type Precio = { es: string; en: string; notaEs?: string; notaEn?: string; precio: string; desde?: boolean };
+export const precios: Precio[] = [
+  { es: 'Botox full face', en: 'Botox full face', precio: '1.200.000' },
+  // TODO: confirmar se o valor é por seringa (1 ml)
+  { es: 'Relleno con ácido hialurónico', en: 'Hyaluronic acid filler', precio: '800.000' },
+  { es: 'Plasma rico en plaquetas', en: 'PRP facial', notaEs: 'por sesión · mínimo 3 sesiones', notaEn: 'per session · minimum 3 sessions', precio: '130.000' },
+  { es: 'Tratamientos con péptidos', en: 'Peptide treatments', precio: '800.000', desde: true },
+  { es: 'Aplicación de peptonas', en: 'Peptone application', precio: '80.000' },
+  { es: 'Sueroterapia', en: 'IV therapy', precio: '100.000', desde: true },
+  { es: 'Masaje relajante terapéutico', en: 'Therapeutic relaxing massage', precio: '130.000' },
+  { es: 'Reducción de medidas', en: 'Body contouring package', notaEs: 'sin aparatología', notaEn: 'manual, no machines', precio: '300.000', desde: true },
+];
 
 const es = {
   htmlLang: 'es-CO',
   ogLocale: 'es_CO',
   path: '/',
-  title: `Botox a domicilio en Medellín | ${site.marca}`,
+  title: `Botox y estética a domicilio en Medellín | ${site.marca}`,
   description:
-    'Botox, rellenos con ácido hialurónico, plasma facial y sueroterapia a domicilio en Medellín. Vamos a tu casa, oficina u hotel, en tu horario. Agenda por WhatsApp.',
-  nav: { domicilio: 'A domicilio', tratamientos: 'Tratamientos', sobre: 'Sobre mí', proceso: 'Cómo funciona', faq: 'Preguntas', cta: 'Agendar' },
-  waDefault: 'Hola, quiero agendar una cita a domicilio',
-  titulo: 'Médica estética',
+    'Botox, ácido hialurónico, plasma, sueroterapia y masajes a domicilio en Medellín. Todos los días de 8 a. m. a 9 p. m., en tu casa, oficina u hotel. Agenda por WhatsApp.',
+  nav: { domicilio: 'A domicilio', tratamientos: 'Tratamientos', precios: 'Precios', sobre: 'Sobre mí', faq: 'Preguntas', cta: 'Agendar' },
+  waDefault: 'Hola Elizabeth, quiero agendar una cita a domicilio',
+  titulo: 'Enfermera profesional · Esteticista',
+  registro: `Enfermera profesional · RETHUS ${site.rethus}`,
   hero: {
-    eyebrow: 'Medicina estética a domicilio · Medellín',
+    eyebrow: 'Estética a domicilio · Medellín',
     h1: 'Botox y estética facial',
     h1em: 'sin salir de tu casa',
-    lead: 'Llevo el consultorio a tu casa, oficina u hotel, en el horario que te sirve. Valoración médica, tratamiento y control, sin trancón ni salas de espera.',
+    lead: 'Llevo los tratamientos a tu casa, oficina u hotel, todos los días de 8 a. m. a 9 p. m. Te explico cada paso antes de empezar, sin trancón ni salas de espera.',
     cta: 'Agenda en tu casa',
     link: 'Ver tratamientos →',
-    trust: ['Casa, oficina u hotel', 'Horarios a tu medida', 'Material estéril de un solo uso'],
+    trust: ['Todos los días, incluso festivos', 'Casa, oficina u hotel', 'Material estéril de un solo uso'],
   },
   dom: {
     eyebrow: 'A domicilio',
     h2: 'Tu agenda manda.',
     h2em: 'Nosotros nos movemos.',
     zonasLabel: 'Zonas que atendemos',
+    zonasNota: 'El valor del desplazamiento depende de la zona.',
     zonasLink: '¿No ves tu zona? Pregúntanos →',
     zonasMsg: 'Hola, ¿atienden en mi zona? Estoy en ',
     ventajas: [
       { t: 'Sin trancón ni salas de espera', d: 'El tratamiento llega a ti. Tu tiempo se queda contigo.' },
-      // TODO: confirmar faixa de horário (noites e fins de semana?)
-      { t: 'En tu horario', d: 'Antes del trabajo, a la hora del almuerzo o al final del día.' },
+      { t: 'Todos los días', d: 'De 8 a. m. a 9 p. m., incluso domingos y festivos. Agenda con mínimo 2 horas de anticipación.' },
       { t: 'Privacidad total', d: 'En tu casa, oficina u hotel, sin cruzarte con nadie.' },
-      { t: 'Mismo estándar médico', d: 'Material estéril de un solo uso, producto sellado y valoración previa.' },
+      { t: 'Atención en grupo', d: '¿Son varias personas? Atendemos a todo el grupo en la misma visita.' },
     ],
   },
   tx: {
@@ -68,28 +82,43 @@ const es = {
         id: 'botox', nombre: 'Toxina botulínica', apodo: 'Botox',
         resumen: 'Relaja de forma controlada los músculos que forman las líneas de expresión de la frente, el entrecejo y las patas de gallo.',
         ideal: 'Líneas de expresión, prevención, mirada cansada',
-        detalle: 'Sesión de 20–30 min · efecto visible en 7–14 días · suele durar de 3 a 6 meses',
+        // TODO: a cliente escreveu "efeito imediato"; o efeito do Botox aparece em dias — mantido o prazo realista
+        detalle: 'Sesión de 1 hora · el efecto empieza a notarse en pocos días y es completo a las 2 semanas',
         msg: 'Hola, quiero información sobre Botox a domicilio',
       },
       {
         id: 'rellenos', nombre: 'Ácido hialurónico', apodo: 'Rellenos faciales',
         resumen: 'Devuelve volumen y define contornos en labios, pómulos, mentón y mandíbula, buscando un resultado proporcionado y natural.',
         ideal: 'Labios, ojeras, surcos, perfilado de mandíbula',
-        detalle: 'Resultado inmediato · duración variable según zona y producto',
+        detalle: 'Sesión de 1 hora · resultado inmediato',
         msg: 'Hola, quiero información sobre rellenos con ácido hialurónico',
       },
       {
         id: 'plasma', nombre: 'Plasma rico en plaquetas', apodo: 'Plasma facial',
-        resumen: 'Usa tu propio plasma para estimular colágeno y mejorar la textura, la luminosidad y las líneas finas de la piel.',
+        resumen: 'Usa tu propio plasma para estimular colágeno y mejorar la textura, la luminosidad y las líneas finas. Lo combinamos con una limpieza facial profunda.',
         ideal: 'Piel opaca, textura irregular, primeros signos de edad',
-        detalle: '100% autólogo · se recomiendan varias sesiones',
+        detalle: 'Sesión de 2 horas con limpieza facial profunda · mínimo 3 sesiones',
         msg: 'Hola, quiero información sobre plasma facial',
       },
       {
+        id: 'skinboosters', nombre: 'Mesoterapia', apodo: 'Skinboosters',
+        resumen: 'Microinyecciones de activos hidratantes y revitalizantes que mejoran la calidad, la hidratación y el brillo de la piel.',
+        ideal: 'Piel deshidratada, cansada o sin brillo',
+        detalle: 'El número de sesiones depende de tu piel',
+        msg: 'Hola, quiero información sobre skinboosters / mesoterapia',
+      },
+      {
+        id: 'lipoliticos', nombre: 'Enzimas y lipolíticos', apodo: 'Grasa localizada',
+        resumen: 'Ayudan a reducir pequeños depósitos de grasa localizada, como papada, abdomen o flancos, como parte de un plan de cuidado.',
+        ideal: 'Papada, abdomen, flancos',
+        detalle: 'Se requieren varias sesiones',
+        msg: 'Hola, quiero información sobre enzimas / lipolíticos',
+      },
+      {
         id: 'sueroterapia', nombre: 'Sueroterapia', apodo: 'Vitaminas intravenosas',
-        resumen: 'Fórmulas intravenosas con vitaminas, minerales y antioxidantes, indicadas después de una valoración médica.',
-        ideal: 'Cansancio, apoyo nutricional, cuidado de la piel',
-        detalle: 'Sesión de 40–60 min en tu casa, oficina u hotel',
+        resumen: 'Fórmulas intravenosas con vitaminas, minerales y antioxidantes, escogidas según cómo te sientes y lo que buscas.',
+        ideal: 'Cansancio, recuperación, apoyo nutricional, piel',
+        detalle: 'Sesión de aprox. 1 hora · los mejores resultados se ven con varias sesiones',
         msg: 'Hola, quiero información sobre sueroterapia',
       },
     ],
@@ -98,37 +127,60 @@ const es = {
     eyebrow: 'Sueroterapia',
     h2: 'Nutrición que entra',
     h2em: 'directo a donde se necesita',
-    lead: 'Fórmulas intravenosas preparadas según tu valoración, aplicadas en tu casa, oficina u hotel con acompañamiento médico durante toda la sesión. Puedes seguir trabajando o descansar mientras tanto.',
+    lead: 'Fórmulas intravenosas aplicadas en tu casa, oficina u hotel, con acompañamiento durante toda la sesión. Puedes seguir trabajando o descansar mientras tanto.',
     cta: 'Preguntar por un suero',
     msg: 'Hola, quiero información sobre sueroterapia',
-    // Textos suavizados em relação aos flyers (sem "elimina metales pesados")
     items: [
       { nombre: 'Multivitamínico', texto: 'Complejo B, B12, zinc y magnesio para energía y vitalidad.' },
       { nombre: 'Megadosis de vitamina C', texto: 'Antioxidante y apoyo a la producción de colágeno.' },
       { nombre: 'Antienvejecimiento', texto: 'Antioxidantes enfocados en la piel y el estrés oxidativo.' },
       { nombre: 'Detox', texto: 'Hidratación y nutrientes de apoyo a la función hepática.' },
       { nombre: 'Hidratación', texto: 'Líquidos y electrolitos para una hidratación profunda.' },
+      { nombre: 'Resaca y recuperación', texto: 'Hidratación, electrolitos y vitaminas para recuperarte después de una noche larga.' },
+      { nombre: 'NAD+', texto: 'Coenzima ligada a la energía celular, muy usada en protocolos de bienestar.' },
     ],
+  },
+  spa: {
+    eyebrow: 'Spa a domicilio',
+    h2: 'Bienestar también',
+    h2em: 'para el cuerpo',
+    items: [
+      { t: 'Limpieza facial profunda', d: 'Limpieza, extracción e hidratación de la piel.', tiempo: '1 h 20 min' },
+      { t: 'Masaje relajante terapéutico', d: 'Para soltar tensión y descansar de verdad, sin salir de casa.', tiempo: '1 h 20 min' },
+      { t: 'Masaje post-quirúrgico', d: 'Acompañamiento en la recuperación después de una cirugía estética.', tiempo: '1 h' },
+      { t: 'Reducción de medidas', d: 'Paquetes manuales, sin aparatología, adaptados a cada persona.', tiempo: '1 h o más' },
+    ],
+    msg: 'Hola, quiero información sobre los masajes y tratamientos corporales',
+    cta: 'Consultar',
+  },
+  precios: {
+    eyebrow: 'Precios',
+    h2: 'Claros',
+    h2em: 'desde el principio',
+    desde: 'desde',
+    nota: 'Precios en pesos colombianos. El valor del desplazamiento depende de la zona. Hay promociones por temporada: pregúntanos por WhatsApp.',
+    cta: 'Pedir mi cotización',
+    msg: 'Hola, quiero una cotización',
   },
   sobre: {
     eyebrow: 'Sobre mí',
     h2: 'Tu bienestar',
     h2em: 'es mi misión',
     p: [
-      `Soy ${site.profesional}, médica estética en Medellín. Atiendo a domicilio porque sé que tu tiempo vale: llevo el mismo cuidado de un consultorio a donde tú estés.`,
-      'Creo en una estética que respeta tus rasgos: pequeños cambios, bien indicados, que te hacen ver descansada y segura de ti misma. Antes de cualquier procedimiento te explico con honestidad qué se puede esperar — y qué no.',
+      `Soy ${site.profesional}, enfermera profesional, esteticista y cosmetóloga, con máster en medicina estética, nutrición y antienvejecimiento y formación en armonización facial con toxina botulínica y ácido hialurónico.`,
+      'Mi pasión por la estética nació del deseo de ayudar a las personas a sentirse más seguras, bonitas y felices consigo mismas. Elegí trabajar a domicilio para ofrecer comodidad, tranquilidad y confianza: una experiencia exclusiva, con dedicación y atención individualizada, sin necesidad de salir de casa.',
     ],
-    alt: `${site.profesional}, médica estética a domicilio en Medellín`,
+    alt: `${site.profesional}, enfermera y esteticista a domicilio en Medellín`,
   },
   proceso: {
     eyebrow: 'Cómo funciona',
     h2: 'Así es',
     h2em: 'la visita',
     pasos: [
-      { t: 'Escríbenos', d: 'Dinos qué quieres mejorar, tu zona y el horario que te sirve. Respondemos por WhatsApp.' },
-      { t: 'Valoración médica', d: 'Revisamos tu historia y tus expectativas antes de aplicar cualquier tratamiento.' },
-      { t: 'Vamos hasta ti', d: 'Llegamos a tu casa, oficina u hotel con todo el material estéril. Solo necesitas un espacio con buena luz.' },
-      { t: 'Control', d: 'Seguimiento por WhatsApp y visita de control si hace falta algún ajuste.' },
+      { t: 'Escríbenos', d: 'Dinos qué quieres, tu zona y el horario. Agenda con mínimo 2 horas de anticipación.' },
+      { t: 'Valoración', d: 'Revisamos tu historia y te explicamos con calma qué se va a hacer y qué resultado esperar.' },
+      { t: 'Vamos hasta ti', d: 'Llegamos con todo el material estéril. Solo necesitas un espacio con buena luz.' },
+      { t: 'Control incluido', d: 'Seguimiento por WhatsApp y control posterior incluido en el precio.' },
     ],
   },
   faq: {
@@ -136,19 +188,20 @@ const es = {
     h2: 'Lo que más',
     h2em: 'nos preguntan',
     items: [
+      { q: '¿Quién realiza los tratamientos?', a: `${site.profesional}, enfermera profesional (RETHUS ${site.rethus}), esteticista y cosmetóloga, con máster en medicina estética y formación en armonización facial.` },
+      { q: '¿Es seguro hacerlo en casa?', a: 'Sí: antes de empezar hacemos una valoración, usamos material estéril de un solo uso y el producto sellado se abre frente a ti.' },
+      { q: '¿Con cuánta anticipación debo agendar?', a: 'Con mínimo 2 horas. Atendemos todos los días, incluso domingos y festivos, de 8 a. m. a 9 p. m.' },
       { q: '¿Cuánto dura el efecto del Botox?', a: 'En la mayoría de las personas dura entre 3 y 6 meses. Depende del metabolismo, la zona tratada y la frecuencia de las aplicaciones.' },
       { q: '¿Voy a quedar con cara "congelada"?', a: 'No es el objetivo. La dosis se ajusta para suavizar las líneas sin quitar la expresión. Buscamos que te veas descansada, no diferente.' },
-      { q: '¿Es seguro hacerlo en casa?', a: 'Sí, con las mismas condiciones que en un consultorio: valoración previa, material estéril de un solo uso y producto sellado que se abre frente a ti.' },
       { q: '¿Qué necesito tener listo?', a: 'Un espacio tranquilo, con buena luz y una silla o sofá cómodo. Nosotros llevamos todo lo demás.' },
       { q: '¿Duele?', a: 'Se usan agujas muy finas y, cuando hace falta, anestesia tópica. La mayoría lo describe como una molestia leve y breve.' },
-      { q: '¿Cuándo puedo volver a mi rutina?', a: 'Normalmente el mismo día. Te damos indicaciones simples, como no acostarte ni hacer ejercicio intenso en las horas siguientes.' },
       { q: '¿Quién no debería hacerse estos tratamientos?', a: 'Embarazo, lactancia, algunas enfermedades neuromusculares o infecciones activas en la zona. Por eso siempre hay valoración previa.' },
-      { q: '¿A qué zonas van?', a: 'Medellín y el área metropolitana. Escríbenos tu barrio por WhatsApp y te confirmamos disponibilidad.' },
-      { q: '¿Puedo agendar para varias personas?', a: 'Claro. Puedes reunir amigas, familia o compañeros de trabajo en la misma visita. Escríbenos y armamos el plan.' },
+      { q: '¿Cobran el desplazamiento?', a: 'Sí, y el valor depende de la zona. Escríbenos tu barrio por WhatsApp y te damos el precio total antes de agendar.' },
+      { q: '¿El control está incluido?', a: 'Sí. El control posterior está incluido en el precio del tratamiento.' },
     ],
   },
-  cta: { h2: '¿Lista para verte', h2em: 'como te sientes?', p: 'Escríbenos tu zona y el horario que te sirve. Vamos hasta ti en Medellín.' },
-  footer: { legal: 'Los procedimientos requieren valoración médica previa. Los resultados varían de una persona a otra.', zona: 'Medellín y área metropolitana · Atención a domicilio' },
+  cta: { h2: 'Agenda hoy,', h2em: 'te atendemos hoy', p: 'Con 2 horas de anticipación vamos a tu casa, oficina u hotel en Medellín.' },
+  footer: { legal: 'Los procedimientos requieren valoración previa. Los resultados varían de una persona a otra.', zona: 'Medellín y área metropolitana · Todos los días de 8 a. m. a 9 p. m.' },
   waAria: 'Escríbenos por WhatsApp',
 };
 
@@ -156,33 +209,35 @@ const en: typeof es = {
   htmlLang: 'en',
   ogLocale: 'en_US',
   path: '/en/',
-  title: `Botox in Medellín — We Come to You | ${site.marca}`,
+  title: `Botox & IV Therapy in Medellín — We Come to You | ${site.marca}`,
   description:
-    'Botox, dermal fillers, PRP facials and IV vitamin therapy in Medellín, delivered to your hotel, Airbnb or home by an aesthetic doctor. Book on WhatsApp.',
-  nav: { domicilio: 'We come to you', tratamientos: 'Treatments', sobre: 'About', proceso: 'How it works', faq: 'FAQ', cta: 'Book' },
-  waDefault: "Hi, I'd like to book a home visit",
-  titulo: 'Aesthetic doctor',
+    'Botox, fillers, PRP, IV drips (including hangover recovery) and massages at your hotel, Airbnb or home in Medellín. Every day, 8 am–9 pm. Book on WhatsApp.',
+  nav: { domicilio: 'We come to you', tratamientos: 'Treatments', precios: 'Prices', sobre: 'About', faq: 'FAQ', cta: 'Book' },
+  waDefault: "Hi Elizabeth, I'd like to book a visit",
+  titulo: 'Licensed nurse · Aesthetician',
+  registro: `Licensed nurse · RETHUS ${site.rethus}`,
   hero: {
-    eyebrow: 'Mobile aesthetic medicine · Medellín',
+    eyebrow: 'Mobile aesthetics · Medellín',
     h1: 'Botox and facial aesthetics',
     h1em: 'at your hotel or home',
-    lead: 'An aesthetic doctor comes to your hotel, Airbnb or office, on your schedule. Medical assessment, treatment and follow-up — no clinic, no waiting room.',
+    lead: 'A licensed nurse and aesthetician comes to your hotel, Airbnb or office, every day from 8 am to 9 pm. Every step explained before we start — no clinic, no waiting room.',
     cta: 'Book a visit',
     link: 'See treatments →',
-    trust: ['Hotel, Airbnb or home', 'Fits your itinerary', 'Sterile, single-use supplies'],
+    trust: ['Every day, holidays included', 'Hotel, Airbnb or home', 'Sterile, single-use supplies'],
   },
   dom: {
     eyebrow: 'We come to you',
     h2: 'Your schedule rules.',
     h2em: 'We do the moving.',
     zonasLabel: 'Areas we cover',
+    zonasNota: 'Travel fee depends on the area.',
     zonasLink: "Don't see your area? Ask us →",
     zonasMsg: "Hi, do you cover my area? I'm staying in ",
     ventajas: [
       { t: 'No traffic, no waiting room', d: 'Treatment comes to you, so you keep your day for Medellín.' },
-      { t: 'Around your plans', d: 'Before a tour, after a meeting or at the end of the day.' },
+      { t: 'Every day', d: '8 am to 9 pm, Sundays and holidays included. Book at least 2 hours ahead.' },
       { t: 'Complete privacy', d: 'In your own room or space, away from anyone else.' },
-      { t: 'Same medical standard', d: 'Sterile single-use supplies, sealed product and a prior assessment.' },
+      { t: 'Groups welcome', d: 'Traveling with friends? We treat the whole group in one visit.' },
     ],
   },
   tx: {
@@ -197,28 +252,42 @@ const en: typeof es = {
         id: 'botox', nombre: 'Botulinum toxin', apodo: 'Botox',
         resumen: 'Gently relaxes the muscles behind expression lines on the forehead, between the brows and around the eyes.',
         ideal: 'Expression lines, prevention, tired-looking eyes',
-        detalle: '20–30 min session · visible in 7–14 days · usually lasts 3–6 months',
+        detalle: '1-hour session · starts to show within days, full result at 2 weeks',
         msg: "Hi, I'd like information about Botox at my hotel/home",
       },
       {
         id: 'rellenos', nombre: 'Hyaluronic acid', apodo: 'Dermal fillers',
         resumen: 'Restores volume and defines lips, cheekbones, chin and jawline for a balanced, natural-looking result.',
         ideal: 'Lips, under-eyes, smile lines, jawline',
-        detalle: 'Immediate result · duration depends on area and product',
+        detalle: '1-hour session · immediate result',
         msg: "Hi, I'd like information about dermal fillers",
       },
       {
-        id: 'plasma', nombre: 'Platelet-rich plasma (PRP)', apodo: 'PRP facial',
-        resumen: 'Uses your own plasma to boost collagen and improve skin texture, glow and fine lines.',
+        id: 'plasma', nombre: 'Platelet-rich plasma', apodo: 'PRP facial',
+        resumen: 'Uses your own plasma to boost collagen and improve texture, glow and fine lines, combined with a deep-cleansing facial.',
         ideal: 'Dull skin, uneven texture, early signs of aging',
-        detalle: '100% from your own blood · several sessions recommended',
+        detalle: '2-hour session with deep-cleansing facial · minimum 3 sessions',
         msg: "Hi, I'd like information about a PRP facial",
       },
       {
+        id: 'skinboosters', nombre: 'Mesotherapy', apodo: 'Skin boosters',
+        resumen: 'Micro-injections of hydrating, revitalizing actives that improve skin quality, hydration and glow.',
+        ideal: 'Dehydrated, tired or dull skin',
+        detalle: 'Number of sessions depends on your skin',
+        msg: "Hi, I'd like information about skin boosters",
+      },
+      {
+        id: 'lipoliticos', nombre: 'Enzymes & lipolytics', apodo: 'Stubborn fat',
+        resumen: 'Help reduce small pockets of localized fat — double chin, abdomen or flanks — as part of a care plan.',
+        ideal: 'Double chin, abdomen, flanks',
+        detalle: 'Several sessions required',
+        msg: "Hi, I'd like information about fat-dissolving treatments",
+      },
+      {
         id: 'sueroterapia', nombre: 'IV therapy', apodo: 'IV vitamin drips',
-        resumen: 'Intravenous blends of vitamins, minerals and antioxidants, prescribed after a medical assessment.',
-        ideal: 'Fatigue, jet lag, hydration, skin care',
-        detalle: '40–60 min session at your hotel, Airbnb or home',
+        resumen: 'Intravenous blends of vitamins, minerals and antioxidants, chosen for how you feel and what you need.',
+        ideal: 'Jet lag, hangovers, fatigue, hydration, skin',
+        detalle: 'About 1 hour · best results with several sessions',
         msg: "Hi, I'd like information about IV therapy",
       },
     ],
@@ -227,7 +296,7 @@ const en: typeof es = {
     eyebrow: 'IV therapy',
     h2: 'Nutrients that go',
     h2em: 'straight where they’re needed',
-    lead: 'IV blends prepared after your assessment and given at your hotel, Airbnb or home, with a doctor present for the whole session. Rest, work or recover from your flight meanwhile.',
+    lead: 'IV drips at your hotel, Airbnb or home, with a professional with you for the whole session. Rest, work or recover from your flight — or last night — meanwhile.',
     cta: 'Ask about an IV drip',
     msg: "Hi, I'd like information about IV therapy",
     items: [
@@ -236,27 +305,51 @@ const en: typeof es = {
       { nombre: 'Anti-aging', texto: 'Antioxidants focused on the skin and oxidative stress.' },
       { nombre: 'Detox', texto: 'Hydration and nutrients that support liver function.' },
       { nombre: 'Hydration', texto: 'Fluids and electrolytes for deep rehydration.' },
+      { nombre: 'Hangover recovery', texto: 'Fluids, electrolytes and vitamins to bounce back after a long night out.' },
+      { nombre: 'NAD+', texto: 'A coenzyme linked to cellular energy, popular in wellness protocols.' },
     ],
+  },
+  spa: {
+    eyebrow: 'Spa at home',
+    h2: 'Wellness',
+    h2em: 'for the body, too',
+    items: [
+      { t: 'Deep-cleansing facial', d: 'Cleansing, extraction and hydration for your skin.', tiempo: '1 h 20 min' },
+      { t: 'Therapeutic relaxing massage', d: 'Release tension and truly rest, without leaving your room.', tiempo: '1 h 20 min' },
+      { t: 'Post-surgery massage', d: 'Support for your recovery after cosmetic surgery.', tiempo: '1 h' },
+      { t: 'Body contouring', d: 'Manual packages, no machines, tailored to each person.', tiempo: '1 h+' },
+    ],
+    msg: "Hi, I'd like information about massages and body treatments",
+    cta: 'Ask us',
+  },
+  precios: {
+    eyebrow: 'Prices',
+    h2: 'Clear',
+    h2em: 'from the start',
+    desde: 'from',
+    nota: 'Prices in Colombian pesos (COP). Travel fee depends on the area. Seasonal promotions available — ask us on WhatsApp.',
+    cta: 'Get my quote',
+    msg: "Hi, I'd like a quote",
   },
   sobre: {
     eyebrow: 'About me',
     h2: 'Your well-being',
     h2em: 'is my mission',
     p: [
-      `I'm ${site.profesional}, an aesthetic doctor based in Medellín. I run a mobile practice because your time matters: I bring the same care you'd get in a clinic to wherever you are.`,
-      "I believe in aesthetics that respect your features: small, well-chosen changes that make you look rested and confident. Before any procedure, I'll tell you honestly what to expect — and what not to.",
+      `I'm ${site.profesional}, a licensed nurse, aesthetician and cosmetologist, with a master's in aesthetic medicine, nutrition and anti-aging, and training in facial harmonization with botulinum toxin and hyaluronic acid.`,
+      'My passion for aesthetics comes from wanting people to feel more confident, beautiful and happy with themselves. I chose to work as a mobile practice to offer comfort, calm and trust: an exclusive, one-on-one experience, without leaving your room.',
     ],
-    alt: `${site.profesional}, mobile aesthetic doctor in Medellín`,
+    alt: `${site.profesional}, mobile nurse and aesthetician in Medellín`,
   },
   proceso: {
     eyebrow: 'How it works',
     h2: 'Your visit,',
     h2em: 'step by step',
     pasos: [
-      { t: 'Message us', d: "Tell us what you'd like, where you're staying and when works for you. We reply on WhatsApp." },
-      { t: 'Medical assessment', d: 'We review your history and goals before any treatment.' },
+      { t: 'Message us', d: "Tell us what you'd like, where you're staying and when. Book at least 2 hours ahead." },
+      { t: 'Assessment', d: "We review your history and explain calmly what we'll do and what result to expect." },
       { t: 'We come to you', d: 'We arrive with everything sterile and ready. All you need is a quiet spot with good light.' },
-      { t: 'Follow-up', d: 'Check-in on WhatsApp — even after you fly home — and a touch-up visit if needed.' },
+      { t: 'Follow-up included', d: 'Check-in on WhatsApp — even after you fly home. Follow-up is included in the price.' },
     ],
   },
   faq: {
@@ -264,19 +357,20 @@ const en: typeof es = {
     h2: 'What people',
     h2em: 'ask us most',
     items: [
-      { q: 'Is it safe to do this at a hotel or Airbnb?', a: 'Yes, under the same conditions as a clinic: prior assessment, sterile single-use supplies and sealed product opened in front of you.' },
-      // TODO: confirmar se a médica atende em inglês
-      { q: 'Do you speak English?', a: 'Yes. You can book, ask questions and receive your aftercare instructions in English.' },
+      { q: 'Who performs the treatments?', a: `${site.profesional}, a licensed nurse in Colombia (RETHUS ${site.rethus}), aesthetician and cosmetologist, with a master's in aesthetic medicine and training in facial harmonization.` },
+      { q: 'Do you speak English?', a: "Yes, conversational English during your visit — and WhatsApp messages in English are no problem." },
+      { q: 'Is it safe to do this at a hotel or Airbnb?', a: 'Yes: there is always an assessment first, we use sterile single-use supplies, and sealed product is opened in front of you.' },
+      { q: 'How far ahead do I need to book?', a: 'At least 2 hours. We work every day, including Sundays and holidays, from 8 am to 9 pm.' },
       { q: 'How long does Botox last?', a: 'For most people, 3 to 6 months. It depends on metabolism, the area treated and how often you get it.' },
       { q: 'Can I fly or go out after treatment?', a: 'Usually yes, the same day. Avoid lying down and intense exercise for a few hours. Fillers and PRP can cause mild swelling, so plan them a few days before important photos.' },
       { q: 'Will I look "frozen"?', a: "That's not the goal. The dose is adjusted to soften lines while keeping your expression. You should look rested, not different." },
       { q: 'Who should not get these treatments?', a: 'Pregnancy, breastfeeding, some neuromuscular conditions or active skin infections in the area. That is why there is always an assessment first.' },
-      { q: 'Which areas do you cover?', a: "Medellín and the metro area, including El Poblado, Provenza, Laureles and Envigado. Send us your hotel or neighborhood and we'll confirm." },
-      { q: 'Can I book for a group?', a: 'Of course. Traveling with friends? We can treat several people in the same visit.' },
+      { q: 'Is there a travel fee?', a: "Yes, it depends on the area. Send us your hotel or neighborhood and we'll give you the full price before booking." },
+      { q: 'Can I book for a group?', a: 'Of course. We can treat several people in the same visit.' },
     ],
   },
-  cta: { h2: 'Ready to look', h2em: 'as good as you feel?', p: "Tell us where you're staying and when works for you. We'll come to you in Medellín." },
-  footer: { legal: 'All procedures require a prior medical assessment. Results vary from person to person.', zona: 'Medellín & metro area · Mobile service' },
+  cta: { h2: 'Book today,', h2em: 'see us today', p: 'With 2 hours’ notice we come to your hotel, Airbnb or home in Medellín.' },
+  footer: { legal: 'All procedures require a prior assessment. Results vary from person to person.', zona: 'Medellín & metro area · Every day, 8 am–9 pm' },
   waAria: 'Message us on WhatsApp',
 };
 
